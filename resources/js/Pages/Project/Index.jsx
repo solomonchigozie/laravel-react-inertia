@@ -5,6 +5,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from '@/constants'
 import { Head, Link, router } from '@inertiajs/react'
 import React from 'react'
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/16/solid'
+import TableHeading from '@/Components/TableHeading'
 
 export default function Index({ projects, queryParams = null }) {
     queryParams = queryParams || {}
@@ -26,6 +28,21 @@ export default function Index({ projects, queryParams = null }) {
         searchFieldChanged(name, e.target.value);
     }
 
+    const sortChanged = (name) => {
+        if(name === queryParams.sort_field){
+            if(queryParams.sort_direction === 'asc'){
+                queryParams.sort_direction = 'desc'
+            }else{
+                queryParams.sort_direction = 'asc'
+            }
+        }else{
+            queryParams.sort_field = name;
+            queryParams.sort_direction = 'asc';  
+        }
+
+        router.get(route('project.index'), queryParams)
+    }
+
 
     return (
         <AuthenticatedLayout
@@ -42,14 +59,60 @@ export default function Index({ projects, queryParams = null }) {
                                 <table className='w-full text-left table-auto min-w-max'>
                                     <thead>
                                         <tr className='text-nowrap'>
-                                            <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>ID</th>
-                                            <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>Image</th>
-                                            <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>Name</th>
-                                            <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>Status</th>
-                                            <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>Create Date</th>
-                                            <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>Due Date</th>
-                                            <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>Created By</th>
-                                            <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50 text-right'>Actions</th>
+                                            <TableHeading 
+                                            name="id"
+                                            sort_field={queryParams.sort_field}
+                                            sort_direction={queryParams.sort_direction}
+                                            sortChanged={sortChanged}
+                                            >ID</TableHeading>
+                                            <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50 flex'>
+                                                <div className='px-3 py-2 p-4 flex items-center justify-between gap-1 cursor-pointer'>
+                                                    Image
+                                               </div> 
+                                            </th>
+                                            <th onClick={(e) => sortChanged('name')}  className=' border-b border-blue-gray-100 bg-blue-gray-50'>
+                                                <div className='px-3 py-2 p-4 flex items-center justify-between gap-1 cursor-pointer'>
+                                                    Name
+                                                        <div>
+                                                        <ChevronUpIcon className='w-4' />
+                                                        <ChevronDownIcon className='w-4 -mt-2' />
+                                                    </div>
+                                               </div> 
+                                            </th>
+                                            <th onClick={(e) => sortChanged('status')}  className='border-b border-blue-gray-100 bg-blue-gray-50'>
+
+                                                <div className='px-3 py-2 p-4 flex items-center justify-between gap-1 cursor-pointer'>
+                                                    Status
+                                                        <div>
+                                                        <ChevronUpIcon className='w-4' />
+                                                        <ChevronDownIcon className='w-4 -mt-2' />
+                                                    </div>
+                                               </div> 
+                                               
+                                            </th>
+                                            <th onClick={(e) => sortChanged('created_at')}  className='border-b border-blue-gray-100 bg-blue-gray-50'>
+                                                <div className='px-3 py-2 p-4 flex items-center justify-between gap-1 cursor-pointer'>
+                                                    Create Date
+                                                        <div>
+                                                        <ChevronUpIcon className='w-4' />
+                                                        <ChevronDownIcon className='w-4 -mt-2' />
+                                                    </div>
+                                               </div> 
+
+                                            </th>
+                                            <th onClick={(e) => sortChanged('due_date')}  className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>
+                                                <div className='px-3 py-2 p-4 flex items-center justify-between gap-1 cursor-pointer'>
+                                                    Due Date
+                                                        <div>
+                                                        <ChevronUpIcon className='w-4' />
+                                                        <ChevronDownIcon className='w-4 -mt-2' />
+                                                    </div>
+                                               </div> 
+
+                                                
+                                            </th>
+                                            <th  className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>Created By</th>
+                                            <th  className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50 text-right'>Actions</th>
                                         </tr>
                                     </thead>
                                     <thead>
@@ -59,6 +122,7 @@ export default function Index({ projects, queryParams = null }) {
                                             <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>
                                                 <TextInput className='w-full'  
                                                     placeholder='Project Name'
+                                                    defaultValue={queryParams.name}
                                                     onBlur={e=>searchFieldChanged('name', e.target.value)}
                                                     onKeyPress={e => onKeyPress('name', e)}
                                                 />
@@ -66,6 +130,7 @@ export default function Index({ projects, queryParams = null }) {
                                             <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>
                                                 <SelectInput className='w-full'  
                                                     onChange={e => searchFieldChanged('status', e.target.value)}
+                                                    defaultValue={queryParams.status}
                                                 >
                                                     <option value="">Select</option>
                                                     <option value="pending">Pending</option>
