@@ -5,8 +5,6 @@ import React from 'react'
 import TasksTable from './TasksTable'
 
 export default function Index({ tasks, queryParams = null }) {
-    queryParams = queryParams || {}
-
 
     return (
         <AuthenticatedLayout
