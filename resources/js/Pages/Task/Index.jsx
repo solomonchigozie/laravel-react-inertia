@@ -2,13 +2,12 @@ import Pagination from '@/Components/Pagination'
 import SelectInput from '@/Components/SelectInput'
 import TextInput from '@/Components/TextInput'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
-import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from '@/constants'
+import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from '@/constants'
 import { Head, Link, router } from '@inertiajs/react'
 import React from 'react'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/16/solid'
 import TableHeading from '@/Components/TableHeading'
 
-export default function Index({ projects, queryParams = null }) {
+export default function Index({ tasks, queryParams = null }) {
     queryParams = queryParams || {}
 
     const searchFieldChanged = (name, value) => {
@@ -19,7 +18,7 @@ export default function Index({ projects, queryParams = null }) {
             delete queryParams[name]
         }
 
-        router.get(route('project.index'), queryParams)
+        router.get(route('task.index'), queryParams)
     }
 
     const onKeyPress = (name, e) => {
@@ -40,21 +39,21 @@ export default function Index({ projects, queryParams = null }) {
             queryParams.sort_direction = 'asc';  
         }
 
-        router.get(route('project.index'), queryParams)
+        router.get(route('task.index'), queryParams)
     }
 
 
     return (
         <AuthenticatedLayout
-            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Projects</h2>}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Tasks</h2>}
         >
-            <Head title="Projects" />
+            <Head title="Tasks" />
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                        {/* {JSON.stringify(projects, undefined, 2)} */}
+                        {/* {JSON.stringify(tasks, undefined, 2)} */}
                             <div className='relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border'>
                                 <table className='w-full text-left table-auto min-w-max'>
                                     <thead>
@@ -106,7 +105,7 @@ export default function Index({ projects, queryParams = null }) {
                                             <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'></th>
                                             <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>
                                                 <TextInput className='w-full'  
-                                                    placeholder='Project Name'
+                                                    placeholder='Task Name'
                                                     defaultValue={queryParams.name}
                                                     onBlur={e=>searchFieldChanged('name', e.target.value)}
                                                     onKeyPress={e => onKeyPress('name', e)}
@@ -130,26 +129,26 @@ export default function Index({ projects, queryParams = null }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {projects.data.map((project) => ( 
-                                            <tr className='' key={project.id}>
-                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{project.id}</td>
-                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'> <img src={project.image_path} alt={project.name} style={{width: 60}} /> </td>
-                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{project.name}</td>
+                                        {tasks.data.map((task) => ( 
+                                            <tr className='' key={task.id}>
+                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{task.id}</td>
+                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'> <img src={task.image_path} alt={task.name} style={{width: 60}} /> </td>
+                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{task.name}</td>
                                                 <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>
                                                     <span className={'px-2 py-1 rounded text-white ' +
-                                                        PROJECT_STATUS_CLASS_MAP[project.status]
+                                                        TASK_STATUS_CLASS_MAP[task.status]
                                                     }>
-                                                        {PROJECT_STATUS_TEXT_MAP[project.status]}
+                                                        {TASK_STATUS_TEXT_MAP[task.status]}
                                                     </span>
                                                 </td>
-                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{project.created_at}</td>
-                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{project.due_date}</td>
-                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{project.createdBy.name}</td>
+                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{task.created_at}</td>
+                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{task.due_date}</td>
+                                                <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>{task.createdBy.name}</td>
                                                 <td className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>
-                                                    <Link href={route('project.edit', project.id)}
+                                                    <Link href={route('task.edit', task.id)}
                                                     className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
                                                     >Edit</Link>
-                                                    <Link href={route('project.destroy', project.id)}
+                                                    <Link href={route('task.destroy', task.id)}
                                                     className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
                                                     >Delete</Link>
                                                 </td>
@@ -157,7 +156,7 @@ export default function Index({ projects, queryParams = null }) {
                                         ) )}
                                     </tbody>
                                 </table>
-                                <Pagination links={projects.meta.links} />
+                                <Pagination links={tasks.meta.links} />
                             </div>
 
                         </div>
