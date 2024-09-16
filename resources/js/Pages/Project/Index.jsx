@@ -70,47 +70,32 @@ export default function Index({ projects, queryParams = null }) {
                                                     Image
                                                </div> 
                                             </th>
-                                            <th onClick={(e) => sortChanged('name')}  className=' border-b border-blue-gray-100 bg-blue-gray-50'>
-                                                <div className='px-3 py-2 p-4 flex items-center justify-between gap-1 cursor-pointer'>
-                                                    Name
-                                                        <div>
-                                                        <ChevronUpIcon className='w-4' />
-                                                        <ChevronDownIcon className='w-4 -mt-2' />
-                                                    </div>
-                                               </div> 
-                                            </th>
-                                            <th onClick={(e) => sortChanged('status')}  className='border-b border-blue-gray-100 bg-blue-gray-50'>
+                                            <TableHeading 
+                                            name="name"
+                                            sort_field={queryParams.sort_field}
+                                            sort_direction={queryParams.sort_direction}
+                                            sortChanged={sortChanged}
+                                            >Name</TableHeading>
+                                            <TableHeading 
+                                            name="status"
+                                            sort_field={queryParams.sort_field}
+                                            sort_direction={queryParams.sort_direction}
+                                            sortChanged={sortChanged}
+                                            >Status</TableHeading>
+                                            <TableHeading 
+                                            name="created_at"
+                                            sort_field={queryParams.sort_field}
+                                            sort_direction={queryParams.sort_direction}
+                                            sortChanged={sortChanged}
+                                            >Create Date</TableHeading>
 
-                                                <div className='px-3 py-2 p-4 flex items-center justify-between gap-1 cursor-pointer'>
-                                                    Status
-                                                        <div>
-                                                        <ChevronUpIcon className='w-4' />
-                                                        <ChevronDownIcon className='w-4 -mt-2' />
-                                                    </div>
-                                               </div> 
-                                               
-                                            </th>
-                                            <th onClick={(e) => sortChanged('created_at')}  className='border-b border-blue-gray-100 bg-blue-gray-50'>
-                                                <div className='px-3 py-2 p-4 flex items-center justify-between gap-1 cursor-pointer'>
-                                                    Create Date
-                                                        <div>
-                                                        <ChevronUpIcon className='w-4' />
-                                                        <ChevronDownIcon className='w-4 -mt-2' />
-                                                    </div>
-                                               </div> 
+                                            <TableHeading 
+                                            name="due_date"
+                                            sort_field={queryParams.sort_field}
+                                            sort_direction={queryParams.sort_direction}
+                                            sortChanged={sortChanged}
+                                            >Due Date</TableHeading>
 
-                                            </th>
-                                            <th onClick={(e) => sortChanged('due_date')}  className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>
-                                                <div className='px-3 py-2 p-4 flex items-center justify-between gap-1 cursor-pointer'>
-                                                    Due Date
-                                                        <div>
-                                                        <ChevronUpIcon className='w-4' />
-                                                        <ChevronDownIcon className='w-4 -mt-2' />
-                                                    </div>
-                                               </div> 
-
-                                                
-                                            </th>
                                             <th  className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>Created By</th>
                                             <th  className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50 text-right'>Actions</th>
                                         </tr>
