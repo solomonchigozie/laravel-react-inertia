@@ -5,7 +5,7 @@ import TextInput from '@/Components/TextInput'
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from '@/constants'
 import { Link, router } from '@inertiajs/react'
 
-export default function TasksTable({ tasks, queryParams = null, hideProjectColumn = false }) {
+export default function TasksTable({ tasks, queryParams = null, hideProjectColumn = false, success }) {
     queryParams = queryParams || {}
     const searchFieldChanged = (name, value) => {
         //if value exists
@@ -39,9 +39,24 @@ export default function TasksTable({ tasks, queryParams = null, hideProjectColum
         router.get(route('task.index'), queryParams)
     }
 
+
+    const deleteTask = (task) => {
+        if(!window.confirm('Are you sure you want to delete this task')){
+             return ;
+        }
+
+        router.delete(route('task.destroy', task.id))
+    }
+
     return (
         <>
+            {success && (
+            <div className="bg-emerald-500 py-2 px-4 text-white rounded mb-4">
+                {success}
+            </div> 
+            )}
             <div className='relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border'>
+                
                 <table className='w-full text-left table-auto min-w-max'>
                     <thead>
                         <tr className='text-nowrap'>
@@ -59,7 +74,7 @@ export default function TasksTable({ tasks, queryParams = null, hideProjectColum
 
                             {!hideProjectColumn && <th className='px-3 py-2 p-4 border-b border-blue-gray-100 bg-blue-gray-50'>
                                 <div className='px-3 py-2 p-4 items-center justify-between gap-1 cursor-pointer'>
-                                    Project Name
+                                    Task Name
                                 </div>
                             </th>}
                             
@@ -146,9 +161,10 @@ export default function TasksTable({ tasks, queryParams = null, hideProjectColum
                                     <Link href={route('task.edit', task.id)}
                                         className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
                                     >Edit</Link>
-                                    <Link href={route('task.destroy', task.id)}
-                                        className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
-                                    >Delete</Link>
+                                    <button 
+                                    onClick={(e) => deleteTask(task)}
+                                    className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
+                                    >Delete</button>
                                 </td>
                             </tr>
                         ))}

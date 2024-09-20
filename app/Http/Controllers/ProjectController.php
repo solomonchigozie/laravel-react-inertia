@@ -95,6 +95,7 @@ class ProjectController extends Controller
             'project'=>new ProjectResource($project),
             'tasks'=>TaskResource::collection($tasks),
             'queryParams' => request()->query()?:null,
+            'success'=>session('success'),
         ]);
     }
 
@@ -126,6 +127,7 @@ class ProjectController extends Controller
             }
             
             $data['image_path'] = $image->store('project/'. Str::random(), 'public');
+        
         }
 
         $project->update($data);
