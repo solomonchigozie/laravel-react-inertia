@@ -17,7 +17,8 @@ class Task extends Model
         'created_by',
         'updated_by',
         'project_id',
-        'image_path'
+        'image_path',
+        'assigned_user_id'
     ];
 
     public function project() {
