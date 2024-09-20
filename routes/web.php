@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -28,10 +29,11 @@ Route::redirect('/', '/dashboard');
 
 #user needs to be authenticated and verified before they can access the project
 Route::middleware(['auth', 'verified'])->group(function() {
-    Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
+    Route::get('/dashboard',[DashboardController::class, 'index'] )->name('dashboard');
 
     //define resources for the other routes
     Route::resource('project', ProjectController::class);
+    Route::get('task/my-tasks', [TaskController::class, 'mytasks'])->name('task.myTasks');
     Route::resource('task', TaskController::class);
     Route::resource('user', UserController::class);
 

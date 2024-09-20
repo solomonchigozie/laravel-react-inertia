@@ -146,4 +146,30 @@ class TaskController extends Controller
         ->with('success', "Task \" $name \" was deleted");
 
     }
+
+    public function mytasks()    
+    {
+        $user = Auth::user(); 
+        $query = Task::query()->where("assigned_user_id", $user->id);
+
+        $sortField = request('sort_field', 'created_at');
+        $sortDirection = request('sort_direction', 'desc');
+
+        if(request('name')){
+            $query->where('name','like', '%'.request("name"). '%');
+        }
+
+        if(request('status')) {
+            $query->where('status', request('status'));
+        }
+
+        $tasks = $query->orderBy($sortField, $sortDirection)->paginate(10)->onEachSide(1);
+
+        return inertia('Task/Index',[
+            'tasks'=>TaskResource::collection($tasks),
+            'queryParams' => request()->query()?:null,
+            'success'=>session('success'),
+        ]);
+    }
+
 }
