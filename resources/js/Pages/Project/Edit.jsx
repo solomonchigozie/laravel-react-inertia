@@ -6,24 +6,27 @@ import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-export default function Create() {
-    const {data, setData, post, processing, errors, reset} = useForm({
+export default function Edit({project}) {
+    const {data, setData, post, processing, progress, errors, reset} = useForm({
         image:'',
-        name : '',
-        status : '',
-        description : '',
-        due_date : '',
+        name : project.name || '',
+        status : project.status|| '',
+        description : project.description || '',
+        due_date : project.due_date || '',
+        _method : 'PUT',
     })
-
+ 
     const onSubmit =(e) => {
         e.preventDefault();
+        console.log(data)
 
-        post(route('project.store'))
+        post(route("project.update", project.id))
     }
+
    return ( <AuthenticatedLayout
         header={
             <div className='flex justify-between items-center'>
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Create New Project</h2>
+                <h2 className="font-semibold text-xl text-gray-800 leading-tight">Edit Project "{project.name}" </h2>
             </div>
         }
     >
@@ -36,8 +39,12 @@ export default function Create() {
                         <form 
                             onSubmit={onSubmit}
                             action="" className="p-4 sm:p-8 bg-white shadow sm:rounded-lg"
-                            encType="multipart/form-data"
                         >
+                            {project.image_path && (
+                                <div className="mb-4">
+                                    <img src={project.image_path} className="w-64" />
+                                </div>
+                            )}
                             <div>
                                 <InputLabel  
                                     htmlFor="project_image_path"
@@ -46,7 +53,7 @@ export default function Create() {
                                 <TextInput 
                                     id="project_image_path"
                                     type="file"
-                                    name="image"
+                                    name="image_path"
                                     className="mt-1 block w-full"
                                     onChange={e => setData('image', e.target.files[0])}
                                 />
@@ -116,6 +123,13 @@ export default function Create() {
 
                                 <InputError message={errors.project_status}  className="mt-2" />
                             </div>
+                            <div>
+                            {progress && (
+                            <progress value={progress.percentage} max="100">
+                                {progress.percentage}%
+                            </progress>
+                            )}
+                            </div>
                             <div className="mt-4 text-right">
                                 <Link 
                                 href={route('project.index')}
@@ -137,4 +151,4 @@ export default function Create() {
 
 
     </AuthenticatedLayout>)
-}
+} 
